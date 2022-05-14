@@ -2,7 +2,6 @@
 
 namespace Drupal\commerce_marketplace\Plugin\EntityReferenceSelection;
 
-use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\Plugin\EntityReferenceSelection\DefaultSelection;
 
 /**
@@ -23,8 +22,9 @@ class StoreSelection extends DefaultSelection {
    */
   protected function buildEntityQuery($match = NULL, $match_operator = 'CONTAINS') {
     $query = parent::buildEntityQuery($match, $match_operator);
-    $target_type = $this->configuration['target_type'];
-    $entity_type = $this->entityManager->getDefinition($target_type);
+    $configuration = $this->getConfiguration();
+    $entity_type_id = $configuration['target_type'];
+    $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
     // Do not alter access if user has admin permission.
     if ($this->currentUser->hasPermission($entity_type->getAdminPermission())) {
       return $query;

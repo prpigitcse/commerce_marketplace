@@ -5,11 +5,9 @@ namespace Drupal\Tests\commerce_marketplace\Kernel;
 use Drupal\commerce_marketplace\Plugin\EntityReferenceSelection\StoreSelection;
 use Drupal\commerce_marketplace\StoreAccessControlHandler;
 use Drupal\commerce_store\Entity\Store;
-use Drupal\commerce_store\Entity\StoreInterface;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\Unicode;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Tests\EntityReference\EntityReferenceTestTrait;
+use Drupal\Tests\field\Traits\EntityReferenceTestTrait;
 use Drupal\Tests\commerce\Kernel\CommerceKernelTestBase;
 
 /**
@@ -51,7 +49,7 @@ class StoreAccessTest extends CommerceKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('commerce_store');
     $this->installConfig(['commerce_store', 'commerce_marketplace']);
@@ -104,7 +102,7 @@ class StoreAccessTest extends CommerceKernelTestBase {
    * Tests the entity reference selection access.
    */
   public function testEntityReferenceSelectionAccess() {
-    $field_name = Unicode::strtolower($this->randomMachineName());
+    $field_name = mb_strtolower($this->randomMachineName());
     $this->createEntityReferenceField('entity_test', 'entity_test', $field_name, $this->randomString(), 'commerce_store');
     $field_config = FieldConfig::loadByName('entity_test', 'entity_test', $field_name);
     $handler = $this->container->get('plugin.manager.entity_reference_selection')->getSelectionHandler($field_config);
